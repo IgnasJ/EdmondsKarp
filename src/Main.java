@@ -2,39 +2,48 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-/**
- * Created by Ignas on 2016-12-05.
- */
 public class Main {
     private static int maxFlow = 0;
 
     public static void main(String[] args) {
-        System.out.println("Edmond Karp algorithm!");
+        System.out.println("Edmonds Karp algorithm!");
 
         Vertex s = new Vertex(0, "s");
-        Vertex v1 = new Vertex(1, "v1");
-        Vertex v2 = new Vertex(2, "v2");
-        Vertex v3 = new Vertex(3, "v3");
-        Vertex v4 = new Vertex(4, "v4");
-        Vertex t = new Vertex(5, "t");
+        Vertex a = new Vertex(1, "a");
+        Vertex b = new Vertex(2, "b");
+        Vertex c = new Vertex(3, "c");
+        Vertex i = new Vertex(4, "i");
+        Vertex j = new Vertex(5, "j");
+        Vertex k = new Vertex(6, "k");
+        Vertex t = new Vertex(7, "t");
+
+        Edge.createEdge(s, a, 6);
+        Edge.createEdge(s, b, 10);
+        Edge.createEdge(s, c, 3);
+        Edge.createEdge(a, i, 4);
+        Edge.createEdge(a, j, 1);
+        Edge.createEdge(b, i, 5);
+        Edge.createEdge(b, j, 10);
+        Edge.createEdge(c, j, 2);
+        Edge.createEdge(c, k, 4);
+        Edge.createEdge(i, t, 9);
+        Edge.createEdge(i, j, 8);
+        Edge.createEdge(j, t, 20);
+        Edge.createEdge(j, k, 7);
+        Edge.createEdge(k, t, 7);
+
         s.setStart(true);
         t.setEnd(true);
-        Edge.createEdge(s, v1, 16);
-        Edge.createEdge(s, v2, 13);
-        Edge.createEdge(v1, v3, 12);
-        Edge.createEdge(v2, v1, 4);
-        Edge.createEdge(v2, v4, 14);
-        Edge.createEdge(v3, v2, 9);
-        Edge.createEdge(v3, t, 20);
-        Edge.createEdge(v4, v3, 7);
-        Edge.createEdge(v4, t, 4);
-        Graph graph = new Graph(new ArrayList<>(Arrays.asList(s, v1, v2, v3, v4, t)));
 
-        while(true) {
+        Graph graph = new Graph(new ArrayList<>(Arrays.asList(s, a, b, c, i, j, k, t)));
+
+        while (true) {
             ArrayList<Vertex> path = EdmondsKarp(graph);
             if (path.get(0).getWidth() == 0) break;
 
-            System.out.println("MAX FLOW PATH " + path);
+            printPathThatContainsVertex(path, a);
+
+            //System.out.println("MAX FLOW PATH " + path);
             //Gaunam maziausia width
             int minimumWidthAfterDijiksta = Integer.MAX_VALUE;
             for (Vertex aPath : path) {
@@ -70,8 +79,14 @@ public class Main {
         System.out.println("Ats.: " + maxFlow);
     }
 
+    private static void printPathThatContainsVertex(ArrayList<Vertex> path, Vertex v) {
+        if (path.contains(v))
+            System.out.println("Papildomas takas, turintis viršūnę "+ v.getName() + " :"+ path);
+    }
+
     /**
      * Function that uses Edmonds Karp algorithm to find path from s to t with maximum flow
+     *
      * @param graph
      * @return List of Vertex
      */
